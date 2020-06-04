@@ -45,6 +45,29 @@ int hamming_weight_2(uint32_t n) {
     return count;
 }
 
+/*
+ * 采用分而治之的思想。
+ * */
+int hamming_weight_3(uint32_t n) {
+    n = (n & (0x55555555)) + ((n >> 1) & (0x55555555));
+    n = (n & (0x33333333)) + ((n >> 2) & (0x33333333));
+    n = (n & (0x0F0F0F0F)) + ((n >> 4) & (0x0F0F0F0F));
+    n = (n & (0x00FF00FF)) + ((n >> 8) & (0x00FF00FF));
+    n = (n & (0x0000FFFF)) + ((n >> 16) & (0x0000FFFF));
+
+    return n;
+}
+
+// Error
+int hamming_weight_4(uint32_t n) {
+    n = (n & (0x0000FFFF)) + ((n >> 16) & (0x0000FFFF));
+    n = (n & (0x00FF00FF)) + ((n >> 8) & (0x00FF00FF));
+    n = (n & (0x0F0F0F0F)) + ((n >> 4) & (0x0F0F0F0F));
+    n = (n & (0x33333333)) + ((n >> 2) & (0x33333333));
+    n = (n & (0x55555555)) + ((n >> 1) & (0x55555555));
+
+    return n;
+}
 
 int main(void) {
     int count = 0;
@@ -58,6 +81,17 @@ int main(void) {
     print_bits(k);
     count = hamming_weight_2(k);
     printf("%d\n", count);
+
+    k = 0xffff;
+    print_bits(k);
+    count = hamming_weight_3(k);
+    printf("%d\n", count);
+
+    k = 0xffff;
+    print_bits(k);
+    count = hamming_weight_4(k);
+    printf("%d\n", count);
+
 
     return 0;
 }
