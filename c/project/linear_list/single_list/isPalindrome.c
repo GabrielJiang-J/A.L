@@ -7,42 +7,36 @@ struct list_node {
 
 int isPalindrome_1(struct list_node *head)
 {
-    int rsp = -1;
-    int length = 0;
+    if (!head) 
+        return 1;//链表为空时
+
     int i = 0;
+    int len = 1;
     struct list_node *p = head;
-    struct list_node *stack[16] = { NULL };
-    int is_even = 0;
 
-    if (head == NULL)
-        return 0;
-
-    while (p) {
-        length++;
-        p = p->next;
-    }
-
-    if (length == 1)
+    //链表长度为1时
+    if (p->next == NULL)
         return 1;
 
-    if ((length % 2) != 0) {
-        ++length;
-        is_even = 1;
+    //长度大于1时：先计算链表长度，再定义数组，把链表的值全部导如数组，循环遍历数组至数组长度二分之一处以验证是否为回文数组
+    while (p->next != NULL) {
+        len++;
+        p = p->next;
     }
 
     p = head;
-    while (p) {
-        if (i != (length / 2) && !is_even) {
-            stack[++rsp] = p;
-            ++i;
-        } else {
-            if ((stack[rsp--])->num != p->num) 
-                return 0;
-        }
+    int a[len];
+    while (p->next != NULL) {
+        a[i] = p->num;
+        i++;
         p = p->next;
     }
-    if (rsp != -1)
-        return 0;
+
+    a[i] = p->num;
+    for (i = 0; i < len / 2; i++) {
+        if (a[i] != a[len - 1 - i])
+            return 0;
+    }
 
     return 1;
 }
@@ -70,37 +64,37 @@ int main(int argc, char *argv[])
     int is = 0;
 
     /*
-    struct list_node n1 = {
-        .num = 1,
-        .next = NULL,
-    };
-    struct list_node n2 = {
-        .num = 2,
-        .next = NULL,
-    };
-    struct list_node n3 = {
-        .num = 3,
-        .next = NULL,
-    };
-    struct list_node n4 = {
-        .num = 3,
-        .next = NULL,
-    };
-    struct list_node n5 = {
-        .num = 2,
-        .next = NULL,
-    };
-    struct list_node n6 = {
-        .num = 1,
-        .next = NULL,
-    };
+       struct list_node n1 = {
+       .num = 1,
+       .next = NULL,
+       };
+       struct list_node n2 = {
+       .num = 2,
+       .next = NULL,
+       };
+       struct list_node n3 = {
+       .num = 3,
+       .next = NULL,
+       };
+       struct list_node n4 = {
+       .num = 3,
+       .next = NULL,
+       };
+       struct list_node n5 = {
+       .num = 2,
+       .next = NULL,
+       };
+       struct list_node n6 = {
+       .num = 1,
+       .next = NULL,
+       };
 
-    n1.next = &n2;
-    n2.next = &n3;
-    n3.next = &n4;
-    n4.next = &n5;
-    n5.next = &n6;
-    */
+       n1.next = &n2;
+       n2.next = &n3;
+       n3.next = &n4;
+       n4.next = &n5;
+       n5.next = &n6;
+       */
     struct list_node n1 = {
         .num = 1,
         .next = NULL,
@@ -124,7 +118,7 @@ int main(int argc, char *argv[])
     }
     printf("\n");
 
-    is = isPalindrome_2(&n1);
+    is = isPalindrome_1(&n1);
     printf("%d\n", is);
 
     return 0;
